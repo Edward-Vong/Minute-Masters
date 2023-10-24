@@ -1,1 +1,1 @@
-Things go here
+Instructions to start website:
