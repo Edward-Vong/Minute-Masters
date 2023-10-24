@@ -1,0 +1,2 @@
+Create.js, Edit.js, navbar.js and recordList.js are to be used as an example on how to create a component. 
+Find ways to use this existing program and implement it to our own use.
