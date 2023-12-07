@@ -158,6 +158,7 @@ app.get('/timer', verifyToken, async (req, res) => {
     }
 
     res.status(200).json({ success: true, timer: user.time || { elapsedTime: 0 } });
+    console.log("i work");
   } catch (error) {
     console.error('Error fetching timer data:', error.message);
     res.status(500).json({ success: false, message: 'Internal server error' });

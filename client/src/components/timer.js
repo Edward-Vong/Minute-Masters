@@ -4,6 +4,10 @@ export default function Timer(){
     const [timerRunning, setTimerRunning] = useState(false);
     const intervalRef = useRef(null);
 
+    useEffect(() => {
+        fetchTimerData(); // Fetch timer data when the component mounts
+      }, []);
+
     // export default Timer;
     const startTimer = () => {
         if (!timerRunning) {
@@ -64,7 +68,7 @@ export default function Timer(){
         });
         if (response.ok) {
             const data = await response.json();
-            setElapsedTime(data.elapsedTime);
+            setElapsedTime(data.timer);
           } else {
             console.error('Error fetching timer data:', response.status);
           }
