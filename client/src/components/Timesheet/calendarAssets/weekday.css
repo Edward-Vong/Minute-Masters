@@ -1,0 +1,20 @@
+.cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* Add any additional styling for the weekdays container */
+}
+
+.cal-weekday {
+    text-align: center;
+}
+
+.cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Create 7 equal columns */
+    gap: 8px; /* Adjust the value based on your spacing preference */
+    height: 500px; /* Set the desired height */
+}
+  
+.cal-btn {
+    width: 100%;
+}

@@ -10,12 +10,6 @@ const Register = () => {
         maxWidth: "400px"
     };
 
-    const formStyle = {
-        // Define your styles here
-        // For example:
-        maxWidth: "400px",
-    };
-
     return (
     <main style={mainStyle} className="form-signin d-flex align-items-center">
         <form className="w-100 max-width-form">
