@@ -35,6 +35,24 @@ const Calendar = () => {
     return totalDays;
   };
 
+  const handlePrevMonth = () => {
+    const currentIndex = months.indexOf(activeMonth);
+    const newMonth = currentIndex === 0 ? months[11] : months[currentIndex - 1];
+    const newYear = currentIndex === 0 ? activeYear - 1 : activeYear;
+  
+    setActiveMonth(newMonth);
+    setActiveYear(newYear);
+  };
+  
+  const handleNextMonth = () => {
+    const currentIndex = months.indexOf(activeMonth);
+    const newMonth = currentIndex === 11 ? months[0] : months[currentIndex + 1];
+    const newYear = currentIndex === 11 ? activeYear + 1 : activeYear;
+  
+    setActiveMonth(newMonth);
+    setActiveYear(newYear);
+  };
+
   const daysInMonth = getDaysInMonth(activeMonth, activeYear);
 
   return (
@@ -44,8 +62,8 @@ const Calendar = () => {
           <div className="cal-month">
             
             {/* Month navigation buttons */}
-            <button className="btn" type="button">
-              <svg className="bi" width="16" height="16"><use href="#arrow-left-short"></use></svg>
+            <button className="btn" type="button" onClick={handlePrevMonth}>
+                <svg className="bi" width="16" height="16"><use href="#arrow-left-short"></use></svg>
             </button>
             <strong className="cal-month-name">{`${activeMonth} ${activeYear}`}</strong>
             {/* Month selection dropdown */}
@@ -62,8 +80,8 @@ const Calendar = () => {
               value={activeYear}
               onChange={handleYearChange}
             />
-            <button className="btn" type="button">
-              <svg className="bi" width="16" height="16"><use href="#arrow-right-short"></use></svg>
+            <button className="btn" type="button" onClick={handleNextMonth}>
+                <svg className="bi" width="16" height="16"><use href="#arrow-right-short"></use></svg>
             </button>
           </div>
 
