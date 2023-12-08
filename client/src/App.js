@@ -9,7 +9,7 @@ import Login from "./components/login"; // Import your Login component
 import Register from "./components/register"; // Import your Register component
 import Navbar from "./components/navbar";
 import Timesheet from "./components/Timesheet/timesheet";
- 
+import Timer from "./components/timer";
 const App = () => {
  return (
   <div>
@@ -19,6 +19,7 @@ const App = () => {
         <Route path="/login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
         <Route path="/timesheet" element={<Timesheet />}/>
+        <Route path="/timer" element={<Timer />}/>
       </Routes>
   </div>
   
