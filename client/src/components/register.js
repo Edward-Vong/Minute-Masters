@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import axios from "axios";
 //import React, { useState } from "react";
 import { useNavigate } from "react-router";
  
@@ -49,13 +48,7 @@ export default function App() {
       padding: "20px",
       maxWidth: "400px"
   };
-
-  const formStyle = {
-      // Define your styles here
-      // For example:
-      maxWidth: "400px",
-  };
-
+  
   return (
   <main style={mainStyle} className="form-signin d-flex align-items-center">
       <form className="w-100 max-width-form" onSubmit={onSubmit}>

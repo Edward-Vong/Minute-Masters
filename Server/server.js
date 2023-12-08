@@ -25,12 +25,39 @@ mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser: true, useUnifiedTopol
   });
 
 
-const userSchema = new mongoose.Schema({
-  userName: String,
-  emailAddress: String,
-  password: String,
-  time: Number
-});
+  const timeEntrySchema = new mongoose.Schema({
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+    elapsedTime: {
+      type: Number,
+      default: 0,
+    },
+    timeStopped: {
+      type: Boolean,
+      default: false,
+    },
+  });
+  
+  const userSchema = new mongoose.Schema({
+    userName: String,
+    emailAddress: {
+      type: String,
+      lowercase: true, // Ensures that the email is always stored in lowercase
+    },
+    password: String,
+    timeEntries: {
+      type: [timeEntrySchema],
+      default: [
+        {
+          date: Date.now(),
+          elapsedTime: 0,
+          timeStopped: false,
+        },
+      ],
+    },
+  });
 //console.log(userSchema);
 const User = mongoose.model('User', userSchema);
 
@@ -55,7 +82,7 @@ app.post('/register', async (req, res) => {
     //alert(existingEmail + " " + existingUser);
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = new User({ userName, emailAddress, password: hashedPassword, time: 0 });
+    const newUser = new User({ userName, emailAddress, password: hashedPassword});
     //alert(newUser);
     await newUser.save();
 
@@ -113,6 +140,7 @@ function verifyToken(req, res, next) {
   const token = req.headers.authorization;
 
   if (!token) {
+    res.redirect('/login');
     return res.status(403).json({ success: false, message: 'No token provided' });
   }
 
@@ -127,7 +155,7 @@ function verifyToken(req, res, next) {
 }
 // Add this before app.listen
 app.post('/timer', verifyToken, async (req, res) => {
-  const { elapsedTime } = req.body;
+  const { elapsedTime, timeStopped } = req.body;
   const userId = req.userId;
 
   try {
@@ -136,8 +164,18 @@ app.post('/timer', verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
+   // Find the index of the time entry in the array based on the provided identifier
+   const timeEntryIndex = user.timeEntries.length-1;
 
-    user.time = elapsedTime;
+   if (timeEntryIndex === -1) {
+     return res.status(404).json({ success: false, message: 'Time entry not found' });
+   }
+
+   // Update the properties of the found time entry
+   user.timeEntries[timeEntryIndex].elapsedTime = elapsedTime;
+   
+   user.timeEntries[timeEntryIndex].timeStopped = timeStopped;
+   console.log(user.timeEntries[timeEntryIndex]);
     await user.save();
 
     res.status(200).json({ success: true, message: 'Timer data saved successfully' });
@@ -154,11 +192,18 @@ app.get('/timer', verifyToken, async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
+
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    res.status(200).json({ success: true, timer: user.time || { elapsedTime: 0 } });
-    console.log("i work");
+    const timerData = user.timeEntries.map((entry) => ({
+      date: entry.date,
+      elapsedTime: entry.elapsedTime,
+      timeStopped: entry.timeStopped,
+    }));
+
+    res.status(200).json({ success: true, timer: timerData[user.timeEntries.length-1] });
+    console.log(timerData[0]);
   } catch (error) {
     console.error('Error fetching timer data:', error.message);
     res.status(500).json({ success: false, message: 'Internal server error' });
