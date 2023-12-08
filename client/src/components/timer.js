@@ -7,17 +7,47 @@ export default function Timer() {
   const intervalRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
+//   useEffect(() => {
+//     const authToken = localStorage.getItem('token');
+
+//     // Check if the timer was running before the page was refreshed
+//     const storedStartTime = localStorage.getItem('startTime');
+//     if (localStorage.getItem('running')) {
+        
+//       const storedElapsedTime = Date.now() - storedStartTime;
+//       localStorage.setItem('elapsedTime', storedElapsedTime);
+//       setElapsedTime(storedElapsedTime);
+
+//       intervalRef.current = setInterval(() => {
+//         setElapsedTime((prevElapsedTime) => prevElapsedTime + 1000);
+//       }, 1000);
+//     }
+
+//     if (!authToken) {
+//       // Redirect to login if no token is present
+//       navigate('/login');
+//     } else {
+//       // Fetch timer data when the component mounts
+//       fetchTimerData();
+//     }
+
+//     // Cleanup the interval and save timer data when the component unmounts or beforeunload
+//     return () => {
+//       clearInterval(intervalRef.current);
+//       saveTimerData();
+//     };
+//   }, [navigate]);
+useEffect(() => {
     const authToken = localStorage.getItem('token');
 
     // Check if the timer was running before the page was refreshed
     const storedStartTime = localStorage.getItem('startTime');
-    if (localStorage.getItem('running')) {
-        
+    if (localStorage.getItem('running') == 'true') {
       const storedElapsedTime = Date.now() - storedStartTime;
+      console.log(storedElapsedTime);
       localStorage.setItem('elapsedTime', storedElapsedTime);
       setElapsedTime(storedElapsedTime);
-      setTimerRunning(false);
+      setTimerRunning(true);
 
       intervalRef.current = setInterval(() => {
         setElapsedTime((prevElapsedTime) => prevElapsedTime + 1000);
@@ -27,15 +57,36 @@ export default function Timer() {
     if (!authToken) {
       // Redirect to login if no token is present
       navigate('/login');
-    } else {
+    } else if(localStorage.getItem('running') != 'NaN'){
       // Fetch timer data when the component mounts
-      fetchTimerData();
+      console.log("Im here 2");
+      console.log(localStorage.getItem('running'));
+      setElapsedTime(localStorage.getItem('elapsedTime'));
+    }
+    else
+    {
+        console.log("Im here");
+        fetchTimerData();
     }
 
-    // Cleanup the interval and save timer data when the component unmounts or beforeunload
+    // Handle beforeunload event
+    const handleBeforeUnload = (event) => {
+      saveTimerData();
+      localStorage.setItem('elapsedTime', elapsedTime)
+      // Cancel the default behavior to show the confirmation dialog
+      event.preventDefault();
+      // Chrome requires the returnValue property to be set
+
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup the interval and remove the beforeunload event listener when the component unmounts
     return () => {
       clearInterval(intervalRef.current);
       saveTimerData();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [navigate]);
 
@@ -44,9 +95,10 @@ export default function Timer() {
       const startTime = Date.now() - elapsedTime;
       setTimerRunning(true);
       localStorage.setItem('running', true);
+      localStorage.setItem('startDate', Date.now);
       // Store the start time in localStorage
       localStorage.setItem('startTime', elapsedTime);
-      console.log('Start time stored:', startTime.toString);
+      console.log('Start time stored:', startTime);
       intervalRef.current = setInterval(() => {
         setElapsedTime((prevElapsedTime) => prevElapsedTime + 1000);
       }, 1000);
@@ -72,13 +124,16 @@ export default function Timer() {
   };
 
   const stopTimer = () => {
+    //clearInterval(intervalRef.current);
+    setTimerRunning(false);
+    saveTimerData();
     localStorage.setItem('elapsedTime', 0);
     localStorage.setItem('startTime', elapsedTime);
     localStorage.setItem('running', false);
-    setTimerRunning(false);
+    
     clearInterval(intervalRef.current);
     // Save timer data when stopping the timer
-    saveTimerData();
+    
   };
 
   const displayTime = (milliseconds) => {
