@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Dropdown from "./NavbarReq/dropdown";
 
 // Here, we display our Navbar
-export default function Navbar() {
+const Navbar = () => {
   return (
     <div class="container">
       <nav class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
@@ -31,3 +31,5 @@ export default function Navbar() {
     </div>
   );
 }
+
+export default Navbar;
