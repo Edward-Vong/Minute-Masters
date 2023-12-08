@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Calendar from "./calendarAssets/calendar"
+import TimesheetForm from "./timesheetFormAssets/timesheetForm";
 
 const Timesheet = () => {
   return (
@@ -10,7 +11,7 @@ const Timesheet = () => {
           <Calendar />
         </div>
         <div class="col-4">
-          Data Bar
+          <TimesheetForm />
         </div>
       </div>
     </div>
