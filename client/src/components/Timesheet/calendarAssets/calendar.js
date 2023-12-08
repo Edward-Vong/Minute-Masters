@@ -28,10 +28,15 @@ const Calendar = () => {
     const daysInMonth = new Date(year, months.indexOf(month) + 1, 0).getDate();
     
     const leadingEmptyDays = (firstDayOfMonth) % 7; // Adjust to start from Sunday
-
+  
+    // Calculate trailing (ending) empty days
+    const lastDayOfMonth = new Date(year, months.indexOf(month) + 1, 0).getDay();
+    const endingEmptyDays = (6 - lastDayOfMonth) % 7;
+  
     const totalDays = Array.from({ length: leadingEmptyDays }, (_, i) => '')
-      .concat(Array.from({ length: daysInMonth }, (_, i) => i + 1));
-
+      .concat(Array.from({ length: daysInMonth }, (_, i) => i + 1))
+      .concat(Array.from({ length: endingEmptyDays }, (_, i) => ''));
+  
     return totalDays;
   };
 
