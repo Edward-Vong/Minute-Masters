@@ -1,0 +1,31 @@
+.cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* Add any additional styling for the weekdays container */
+}
+
+.cal-weekday {
+    text-align: center;
+}
+
+.cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Create 7 equal columns */
+    gap: 8px; /* Adjust the value based on your spacing preference */
+    height: 500px; /* Set the desired height */
+}
+
+.cal-month {
+    margin-bottom: 10px;
+}
+  
+.cal-btn {
+    width: 100%;
+}
+
+.cal-btn.disabled {
+  background-color: #ddd; /* Use a grey color for the background */
+  color: #888; /* Use a darker grey color for the text */
+  cursor: not-allowed; /* Change cursor to not-allowed */
+}
+
