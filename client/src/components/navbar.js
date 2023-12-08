@@ -6,6 +6,10 @@ import Dropdown from "./NavbarReq/dropdown";
 
 // Here, we display our Navbar
 const Navbar = () => {
+
+  const token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
+
   return (
     <div class="container">
       <nav class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
@@ -20,12 +24,22 @@ const Navbar = () => {
         </div>
 
         <div class="col-md-3 text-end">
-          <Link to="/login">
-            <button　type="button" class="btn btn-primary me-2">Login</button>
-          </Link>
-          <Link to="/register">
-            <button　type="button" class="btn btn-primary me-2">register</button>
-          </Link>
+        {isLoggedIn ? (
+            /* If logged in, show logout button */
+            <Link to="/logout">
+              <button type="button" className="btn btn-primary me-2">Logout</button>
+            </Link>
+          ) : (
+            /* If not logged in, show login and register buttons */
+            <>
+              <Link to="/login">
+                <button type="button" className="btn btn-primary me-2">Login</button>
+              </Link>
+              <Link to="/register">
+                <button type="button" className="btn btn-primary me-2">Register</button>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </div>
