@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.css";
 import { useNavigate } from "react-router";
 
 const Logout = () => {
@@ -7,7 +8,6 @@ const Logout = () => {
   const handleLogout = () => {
     // Remove the token from localStorage
     localStorage.removeItem('token');
-
     // Perform any additional cleanup if needed
     // For example, resetting user state or other stored data
 
