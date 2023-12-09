@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import calendarImage from "./NavbarReq/calendarImage.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Dropdown from "./NavbarReq/dropdown";
 
 // Here, we display our Navbar
@@ -9,6 +9,16 @@ const Navbar = () => {
 
   const token = localStorage.getItem('token');
   const isLoggedIn = !!token;
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // Remove the token from localStorage or perform logout logic
+    localStorage.removeItem('token');
+    // Perform any additional cleanup if needed
+
+    // Redirect to the desired route after logout
+    navigate('/login'); // Redirect to the login page or any other appropriate route
+  };
 
   return (
     <div class="container">
@@ -26,9 +36,8 @@ const Navbar = () => {
         <div class="col-md-3 text-end">
         {isLoggedIn ? (
             /* If logged in, show logout button */
-            <Link to="/logout">
-              <button type="button" className="btn btn-primary me-2">Logout</button>
-            </Link>
+              <button type="button" className="btn btn-primary me-2" onClick={handleLogout}>Logout
+              </button>
           ) : (
             /* If not logged in, show login and register buttons */
             <>
