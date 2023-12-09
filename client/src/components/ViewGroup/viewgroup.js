@@ -4,6 +4,13 @@ import "bootstrap/dist/css/bootstrap.css";
 const ViewGroup = () => {
   const [isPartOfGroup, setIsPartOfGroup] = useState(true);
   const [leaveMessage, setLeaveMessage] = useState("");
+  const [groupUsers, setGroupUsers] = useState([
+    // Assuming a predefined list of users in the group
+    { id: 1, name: "User 1" },
+    { id: 2, name: "User 2" },
+    { id: 3, name: "User 3" },
+    // Add more users as needed
+  ]);
 
   const handleLeaveGroup = () => {
     // Perform actions to leave the group
@@ -18,6 +25,12 @@ const ViewGroup = () => {
       <h1>Group View</h1>
       {isPartOfGroup ? (
         <div>
+          <h2>Users in the Group:</h2>
+          <ul>
+            {groupUsers.map((user) => (
+              <li key={user.id}>{user.name}</li>
+            ))}
+          </ul>
           <button className="btn btn-danger" onClick={handleLeaveGroup}>
             Leave Group
           </button>
