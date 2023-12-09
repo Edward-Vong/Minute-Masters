@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import ManageGroupLeft from "./manageGroupAssets/manageGroupLeft";
+import NameList from "./manageGroupAssets/nameList";
 
 const ManageGroup = () => {
     return (
@@ -9,8 +10,8 @@ const ManageGroup = () => {
                 <div className="col">
                     <ManageGroupLeft />
                 </div>
-                <div className="col shadow rounded-3 text-center">
-                    some content
+                <div className="col shadow rounded-3">
+                    <NameList />
                 </div>
             </div>
         </div>
