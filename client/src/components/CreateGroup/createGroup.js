@@ -21,7 +21,7 @@ const CreateGroup = () => {
                     </div>
                     <div className="row">
                         <form className="d-flex">
-                            <input className="form-control me-2" type="search" placeholder="Name" aria-label="Search" />
+                            <input className="form-control me-2" placeholder="Name" aria-label="groupName" />
                             <button className="btn" style={{ marginBottom: '5px' }}>
                                 <img src={RightArrow} className="bi" width="16" height="18" />
                             </button>
