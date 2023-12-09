@@ -26,17 +26,17 @@ mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser: true, useUnifiedTopol
 
 
   const timeEntrySchema = new mongoose.Schema({
-    date: {
+    startDate: {
       type: Date,
       default: Date.now,
     },
-    elapsedTime: {
+    stopDate: {
+      type: Date,
+      default: null,
+    },
+    totalTime: {
       type: Number,
       default: 0,
-    },
-    timeStopped: {
-      type: Boolean,
-      default: false,
     },
   });
   
@@ -51,9 +51,9 @@ mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser: true, useUnifiedTopol
       type: [timeEntrySchema],
       default: [
         {
-          date: Date.now(),
-          elapsedTime: 0,
-          timeStopped: false,
+          startDate: Date.now(),
+          stopDate: null,
+          timeStopped: 0,
         },
       ],
     },
@@ -121,21 +121,6 @@ app.post('/login', async (req, res) => {
 });
 
 // Protected route for fetching user info
-app.get('/home/userinfo', verifyToken, async (req, res) => {
-  try {
-    const user = await User.findById(req.userId);
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    res.json({ success: true, user });
-  } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
 function verifyToken(req, res, next) {
   const token = req.headers.authorization;
 

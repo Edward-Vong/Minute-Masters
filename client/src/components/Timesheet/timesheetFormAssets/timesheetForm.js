@@ -6,8 +6,9 @@ const TimesheetForm = ({ selectedDate, onClose }) => {
     date: selectedDate ? `${selectedDate.month} ${selectedDate.day}, ${selectedDate.year}` : '',
     checkIn: '',
     checkOut: '',
-    timeWorked: '',
   });
+
+  
 
   const [isCheckIn, setIsCheckIn] = useState(true);
 
@@ -58,7 +59,7 @@ const TimesheetForm = ({ selectedDate, onClose }) => {
             />
           </div>
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label htmlFor="timeWorked" className="form-label">
               Amount time worked:
             </label>
@@ -70,7 +71,7 @@ const TimesheetForm = ({ selectedDate, onClose }) => {
               className="form-control"
               required
             />
-          </div>
+          </div> */}
 
           <div className="col text-center">
             <div className="row">

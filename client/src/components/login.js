@@ -40,8 +40,9 @@ export default function App() {
   
       const { token } = await response.json();
       localStorage.setItem('token', token); // Storing the token in local storage
+      localStorage.removeItem('token');
       setForm({ emailAddress: "", password: "" });
-      navigate("/timer");
+      navigate("/");
     } catch (error) {
       console.error('Error during login:', error);
     }
