@@ -10,7 +10,7 @@ import Register from "./components/register"; // Import your Register component
 import Navbar from "./components/navbar";
 import Timesheet from "./components/Timesheet/timesheet";
 import Timer from "./components/timer";
-import JoinGroup from "./compononents/JoinGroup/joingroup";
+import JoinGroup from "./components/JoinGroup/joingroup";
 
 const App = () => {
  return (
