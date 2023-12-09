@@ -5,6 +5,8 @@ const JoinGroup = () => {
   const [code, setCode] = useState("");
   const [validCode, setValidCode] = useState(false);
   const [message, setMessage] = useState("");
+  const token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
 
   const checkCodeValidity = () => {
     if (isLoggedIn) {
