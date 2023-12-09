@@ -5,22 +5,15 @@ const JoinGroup = () => {
   const [code, setCode] = useState("");
   const [validCode, setValidCode] = useState(false);
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem('token');
-  const isLoggedIn = !!token;
 
   const checkCodeValidity = () => {
-    if (isLoggedIn) {
-      // If logged in, check the code validity
-      if (code === "YOUR_VALID_CODE") {
-        setValidCode(true);
-        setMessage("Code is valid. You have joined the group!");
-      } else {
-        setValidCode(false);
-        setMessage("Invalid code. Unable to join the group.");
-      }
+    // Replace this condition with your logic to check the validity of the code
+    if (code === "YOUR_VALID_CODE") {
+      setValidCode(true);
+      setMessage("Code is valid. You have joined the group!");
     } else {
-      // If not logged in, display an appropriate message
-      setMessage("Not logged in. Unable to join the group.");
+      setValidCode(false);
+      setMessage("Invalid code. Unable to join the group.");
     }
   };
 
