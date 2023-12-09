@@ -18,6 +18,7 @@ const Dropdown = () => {
         <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
         <li><a className="dropdown-item" href="/creategroup">Create a Group</a></li>
         <li><a className="dropdown-item" href="#">Join a Group</a></li>
+        <li><a className="dropdown-item" href="/managegroup">Manage a Group</a></li>
       </ul>
     </li>
   );
