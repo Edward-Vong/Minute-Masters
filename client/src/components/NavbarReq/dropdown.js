@@ -29,21 +29,10 @@ const Dropdown = () => {
         Timesheets
       </a>
       <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`} data-bs-popper="static">
-        {inGroup ? (
-          // Dropdown items when the user is in a group
-          <>
-            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
-            <li><a className="dropdown-item" href="#">Manage Group</a></li>
-            <li><a className="dropdown-item" href="#">View Group</a></li>
-          </>
-        ) : (
-          // Dropdown items when the user is not in a group
-          <>
-            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
-            <li><a className="dropdown-item" href="#">Create a Group</a></li>
-            <li><a className="dropdown-item" href="/joingroup">Join a Group</a></li>
-          </>
-        )}
+        <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+        <li><a className="dropdown-item" href="/creategroup">Create a Group</a></li>
+        <li><a className="dropdown-item" href="#">Join a Group</a></li>
+        <li><a className="dropdown-item" href="/managegroup">Manage a Group</a></li>
       </ul>
     </li>
   );
