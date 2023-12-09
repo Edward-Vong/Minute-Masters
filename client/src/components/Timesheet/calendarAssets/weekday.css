@@ -29,3 +29,7 @@
   cursor: not-allowed; /* Change cursor to not-allowed */
 }
 
+.cal-btn.today {
+    background-color: #007bff; /* Use a blue color for the background on the current day */
+    color: #fff; /* Use white color for the text on the current day */
+}

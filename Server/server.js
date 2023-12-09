@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
@@ -26,11 +26,11 @@ mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser: true, useUnifiedTopol
 
 
   const timeEntrySchema = new mongoose.Schema({
-    startDate: {
+    date: {
       type: Date,
-      default: Date.now,
+      default: Date.now(),
     },
-    stopDate: {
+    startDate: {
       type: Date,
       default: null,
     },
@@ -51,9 +51,9 @@ mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser: true, useUnifiedTopol
       type: [timeEntrySchema],
       default: [
         {
-          startDate: Date.now(),
-          stopDate: null,
-          timeStopped: 0,
+          date: Date.now(),
+          startDate: null,
+          totalTime: 0,
         },
       ],
     },
@@ -138,9 +138,11 @@ function verifyToken(req, res, next) {
     next();
   });
 }
+
 // Add this before app.listen
-app.post('/timer', verifyToken, async (req, res) => {
-  const { elapsedTime, timeStopped } = req.body;
+// Add this before app.listen
+app.post('/timesheet', verifyToken, async (req, res) => {
+  const { startDate, totalTime } = req.body;
   const userId = req.userId;
 
   try {
@@ -149,28 +151,46 @@ app.post('/timer', verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-   // Find the index of the time entry in the array based on the provided identifier
-   const timeEntryIndex = user.timeEntries.length-1;
 
-   if (timeEntryIndex === -1) {
-     return res.status(404).json({ success: false, message: 'Time entry not found' });
-   }
+    const timeEntryIndex = user.timeEntries.length - 1;
 
-   // Update the properties of the found time entry
-   user.timeEntries[timeEntryIndex].elapsedTime = elapsedTime;
-   
-   user.timeEntries[timeEntryIndex].timeStopped = timeStopped;
-   console.log(user.timeEntries[timeEntryIndex]);
+    function areDifferentDays(date1, date2) {
+      return (
+        date1.getFullYear() !== date2.getFullYear() ||
+        date1.getMonth() !== date2.getMonth() ||
+        date1.getDate() !== date2.getDate()
+      );
+    }
+
+    // If there are no time entries or the dates are different, create a new time entry
+    if (timeEntryIndex === -1 || areDifferentDays(new Date(), user.timeEntries[timeEntryIndex].date)) {
+      // Create a new timeEntries object
+      const newTimeEntry = {
+        date: new Date(),
+        startDate: startDate,
+        totalTime: startDate ? 0 : totalTime, // Initialize totalTime based on the start date
+      };
+
+      user.timeEntries.push(newTimeEntry);
+    } else {
+      // Update the properties of the found time entry
+      user.timeEntries[timeEntryIndex].startDate = startDate;
+      if (startDate === null) {
+        user.timeEntries[timeEntryIndex].totalTime += totalTime;
+      }
+    }
+
     await user.save();
 
-    res.status(200).json({ success: true, message: 'Timer data saved successfully' });
+    res.status(200).json({ success: true, message: 'Time Entry saved successfully' });
   } catch (error) {
-    console.error('Error saving timer data:', error.message);
+    console.error('Error saving time entry:', error.message);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
-app.get('/timer', verifyToken, async (req, res) => {
+
+app.get('/timesheet', verifyToken, async (req, res) => {
   const userId = req.userId;
 
   try {
@@ -183,11 +203,12 @@ app.get('/timer', verifyToken, async (req, res) => {
 
     const timerData = user.timeEntries.map((entry) => ({
       date: entry.date,
-      elapsedTime: entry.elapsedTime,
-      timeStopped: entry.timeStopped,
+      startDate: entry.startDate,
+      totalTime: entry.totalTime,
     }));
 
-    res.status(200).json({ success: true, timer: timerData[user.timeEntries.length-1] });
+    //res.status(200).json({ success: true, timer: timerData[user.timeEntries.length-1] });
+    res.status(200).json({ success: true, timerData });
     console.log(timerData[0]);
   } catch (error) {
     console.error('Error fetching timer data:', error.message);

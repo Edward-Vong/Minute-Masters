@@ -22,7 +22,7 @@ export default function App() {
     e.preventDefault();
   
     // When a post request is sent to the create URL, we'll add a new record to the database.
-    const newPerson = { ...form };
+    const newPerson = { ...form, };
   
     try {
       const response = await fetch("http://localhost:5000/login", {
@@ -37,10 +37,10 @@ export default function App() {
         console.error('Failed to log in');
         return;
       }
-  
+     
       const { token } = await response.json();
       localStorage.setItem('token', token); // Storing the token in local storage
-      localStorage.removeItem('token');
+      //localStorage.removeItem('token');
       setForm({ emailAddress: "", password: "" });
       navigate("/");
     } catch (error) {

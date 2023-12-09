@@ -91,6 +91,15 @@ const Calendar = ({ openTimesheetForm }) => {
 
   let oneCount = 0;
 
+  const isToday = (day) => {
+    const today = new Date();
+    return (
+      activeYear === today.getFullYear() &&
+      months.indexOf(activeMonth) === today.getMonth() &&
+      day === today.getDate()
+    );
+  };
+
   return (
     <div className="dropdown-menu d-block position-static p-2 mx-0 shadow rounded-3 w-340px" data-bs-theme="light">
       <div className="d-grid gap-1">
@@ -144,7 +153,7 @@ const Calendar = ({ openTimesheetForm }) => {
               return (
                 <button
                   key={index}
-                  className={`btn cal-btn ${isDisabled ? 'disabled' : ''} ${day === selectedDay ? 'selected' : ''}`}
+                  className={`btn cal-btn ${isDisabled ? 'disabled' : ''} ${isToday(day) ? 'today' : ''} ${day === selectedDay ? 'selected' : ''}`}
                   type="button"
                   disabled={isDisabled}
                   onClick={() => handleDayButtonClick(day)}
