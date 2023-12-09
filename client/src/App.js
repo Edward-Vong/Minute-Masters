@@ -22,7 +22,7 @@ const App = () => {
         <Route path="/register" element={<Register />}/>
         <Route path="/timesheet" element={<Timesheet />}/>
         <Route path="/timer" element={<Timer />}/>
-        <Route path="/joingroup" elemtn={<JoinGroup />}/>
+        <Route path="/joingroup" element={<JoinGroup />}/>
       </Routes>
   </div>
   
