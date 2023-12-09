@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
-const JoinGroup = () => {
+const JoinGroup = ({ setJoinedGroup }) => {
   const [code, setCode] = useState("");
-  const [validCode, setValidCode] = useState(false);
   const [message, setMessage] = useState("");
 
   const token = localStorage.getItem('token');
@@ -12,11 +11,11 @@ const JoinGroup = () => {
   const checkCodeValidity = () => {
     if (isLoggedIn) {
       // If logged in, check the code validity
-      if (code === "1234") {
-        setValidCode(true);
+      if (code === "1234") { // Replace "1234" with your valid group code
+        setJoinedGroup(true); // Set the joined group state to true
         setMessage("Code is valid. You have joined the group!");
       } else {
-        setValidCode(false);
+        setJoinedGroup(false);
         setMessage("Invalid code. Unable to join the group.");
       }
     } else {
