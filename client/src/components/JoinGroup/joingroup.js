@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
+import Home from "./Home";
 
 const JoinGroup = ({ setJoinedGroup }) => {
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
-
-  const token = localStorage.getItem('token');
-  const isLoggedIn = !!token;
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
   const checkCodeValidity = () => {
     if (isLoggedIn) {
       // If logged in, check the code validity
       if (code === "1234") { // Replace "1234" with your valid group code
-        setJoinedGroup(true); // Set the joined group state to true
+        setJoinedGroup(true);
         setMessage("Code is valid. You have joined the group!");
       } else {
         setJoinedGroup(false);
@@ -44,6 +43,8 @@ const JoinGroup = ({ setJoinedGroup }) => {
         Join Group
       </button>
       {message && <p>{message}</p>}
+      {/* Here, instead of rendering Home directly, you could conditionally render based on joinedGroup */}
+      {/* {joinedGroup && <Home />} */}
     </div>
   );
 };
