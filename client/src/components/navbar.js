@@ -1,47 +1,58 @@
 import React from "react";
- 
-// We import bootstrap to make our application look better.
 import "bootstrap/dist/css/bootstrap.css";
-import { Link } from "react-router-dom";
- 
+import calendarImage from "./NavbarReq/calendarImage.png";
+import { Link, useNavigate } from 'react-router-dom';
+import Dropdown from "./NavbarReq/dropdown";
 
 // Here, we display our Navbar
-export default function Navbar() {
- return (
-  <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+const Navbar = () => {
 
-    <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
-      <a class="navbar-brand col-lg-3 me-0" href="#">Minute Masters</a>
-      <ul class="navbar-nav col-lg-6 justify-content-lg-center">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" to="/home" >Home</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-      </ul>
-      <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+  const token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
 
-        <button class="btn btn-primary">
-          <Link className="nav-link" to="/login">Login</Link>
-        </button>
-        <span style={{ marginRight: '10px' }}></span>
-        <button class="btn btn-primary">
-          <Link className="nav-link" to="/register">Register</Link>
-        </button>
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // Remove the token from localStorage or perform logout logic
+    localStorage.removeItem('token');
+    // Perform any additional cleanup if needed
 
-      </div>
+    // Redirect to the desired route after logout
+    navigate('/login'); // Redirect to the login page or any other appropriate route
+  };
+
+  return (
+    <div class="container">
+      <nav class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="col-md-3 mb-2 mb-md-0 link-body-emphasis text-decoration-none">
+          <img src={ calendarImage } class="bi me-2" width="40" height="40"/>
+          <span class="fs-4">Minute Masters</span>
+        </a>
+
+        <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <Link to="/" class="nav-link px-2">Home</Link>
+          <Dropdown />
+        </div>
+
+        <div class="col-md-3 text-end">
+        {isLoggedIn ? (
+            /* If logged in, show logout button */
+              <button type="button" className="btn btn-primary me-2" onClick={handleLogout}>Logout
+              </button>
+          ) : (
+            /* If not logged in, show login and register buttons */
+            <>
+              <Link to="/login">
+                <button type="button" className="btn btn-primary me-2">Login</button>
+              </Link>
+              <Link to="/register">
+                <button type="button" className="btn btn-primary me-2">Register</button>
+              </Link>
+            </>
+          )}
+        </div>
+      </nav>
     </div>
-  </div>
-</nav>
- );
+  );
 }
+
+export default Navbar;
