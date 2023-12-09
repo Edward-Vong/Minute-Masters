@@ -12,7 +12,7 @@ const JoinGroup = () => {
   const checkCodeValidity = () => {
     if (isLoggedIn) {
       // If logged in, check the code validity
-      if (code === "YOUR_VALID_CODE") {
+      if (code === "1234") {
         setValidCode(true);
         setMessage("Code is valid. You have joined the group!");
       } else {

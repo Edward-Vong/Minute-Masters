@@ -17,7 +17,7 @@ const Dropdown = () => {
       <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`} data-bs-popper="static">
         <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
         <li><a className="dropdown-item" href="#">Create a Group</a></li>
-        <li><a className="dropdown-item" href="#">Join a Group</a></li>
+        <li><a className="dropdown-item" href="/joingroup">Join a Group</a></li>
       </ul>
     </li>
   );
