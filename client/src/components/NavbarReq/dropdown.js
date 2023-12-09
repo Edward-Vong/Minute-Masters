@@ -7,12 +7,11 @@ const Dropdown = () => {
 
   useEffect(() => {
     // Check if the user is in a group
-    const token = localStorage.getItem('token');
-    const isLoggedIn = !!token;
+    const joinedGroup = localStorage.getItem('joinedGroup');
+    const groupMember = !!joinedGroup;
 
-    // Replace this condition with your logic to determine if the user is in a group
-    // For demonstration purposes, checking if the user is logged in as a mock condition
-    if (isLoggedIn) {
+    // Logic to determine if the user is in a group
+    if (groupMember) {
       setInGroup(true); // Set inGroup to true if the user is in a group
     } else {
       setInGroup(false); // Set inGroup to false if the user is not in a group
@@ -29,14 +28,23 @@ const Dropdown = () => {
         Timesheets
       </a>
       <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`} data-bs-popper="static">
-        <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
-        <li><a className="dropdown-item" href="/creategroup">Create a Group</a></li>
-        <li><a className="dropdown-item" href="#">Join a Group</a></li>
-        <li><a className="dropdown-item" href="/managegroup">Manage a Group</a></li>
-        <li><a className="dropdown-item" href="/joingroup">Join a Group</a></li>
+        {inGroup ? (
+          <>
+            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+            <li><a className="dropdown-item" href="/#">Manage Group</a></li>
+            <li><a className="dropdown-item" href="/#">View Group</a></li>
+          </>
+        ) : (
+          <>
+            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+            <li><a className="dropdown-item" href="/#">Create Group</a></li>
+            <li><a className="dropdown-item" href="/joingroup">Join Group</a></li>
+          </>
+        )}
       </ul>
     </li>
   );
+  
 };
 
 export default Dropdown;
