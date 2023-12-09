@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import Home from "./Home";
+
 
 const JoinGroup = ({ setJoinedGroup }) => {
   const [code, setCode] = useState("");
