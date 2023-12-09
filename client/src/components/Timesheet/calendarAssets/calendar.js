@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./weekday.css";
 import LeftArrow from "./arrowL.png";
 import RightArrow from "./arrowR.png";
 
-const Calendar = () => {
+const Calendar = ({ openTimesheetForm }) => {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "January", "February", "March", "April",
@@ -13,9 +13,30 @@ const Calendar = () => {
   ];
 
   const currentYear = new Date().getFullYear();
+  const currentMonth = months[new Date().getMonth()];
+  const currentDay = new Date().getDate();
 
-  const [activeMonth, setActiveMonth] = useState("December"); // Initial active month
-  const [activeYear, setActiveYear] = useState(currentYear); // Initial active year
+  const [activeMonth, setActiveMonth] = useState(currentMonth);
+  const [activeYear, setActiveYear] = useState(currentYear);
+  const [selectedDay, setSelectedDay] = useState(currentDay);
+
+  // Update the active month, year, and selected day based on the current date on mount
+  useEffect(() => {
+    const currentDate = new Date();
+    setActiveMonth(months[currentDate.getMonth()]);
+    setActiveYear(currentDate.getFullYear());
+    setSelectedDay(currentDate.getDate());
+  }, []);
+
+  const handleDayButtonClick = (day) => {
+    setSelectedDay(day);
+    const selectedDate = {
+      month: activeMonth,
+      day,
+      year: activeYear,
+    };
+    openTimesheetForm(selectedDate);
+  };
 
   const handleMonthChange = (event) => {
     setActiveMonth(event.target.value);
@@ -74,40 +95,35 @@ const Calendar = () => {
     <div className="dropdown-menu d-block position-static p-2 mx-0 shadow rounded-3 w-340px" data-bs-theme="light">
       <div className="d-grid gap-1">
         <div className="cal">
-            <div className="cal-month d-flex align-items-center">
-                {/* Month navigation buttons */}
-                <button className="btn me-2" type="button" onClick={handlePrevMonth}>
-                    <img src={LeftArrow} className="bi" width="16" height="16"/>
-                </button>
-                
-                {/* Month selection dropdown */}
-                <select className="form-select me-2 cal-month-name" value={activeMonth} onChange={handleMonthChange}>
-                    {months.map((month) => (
-                    <option key={month} value={month}>{month}</option>
-                    ))}
-                </select>
+          <div className="cal-month d-flex align-items-center">
+            <button className="btn me-2" type="button" onClick={handlePrevMonth}>
+              <img src={LeftArrow} className="bi" width="16" height="16" alt="Previous Month" />
+            </button>
 
-                {/* Year selection input */}
-                <input
-                    type="number"
-                    className="form-control me-2 cal-year-input"
-                    value={activeYear}
-                    onChange={handleYearChange}
-                />
+            <select className="form-select me-2 cal-month-name" value={activeMonth} onChange={handleMonthChange}>
+              {months.map((month) => (
+                <option key={month} value={month}>{month}</option>
+              ))}
+            </select>
 
-                <button className="btn" type="button" onClick={handleNextMonth}>
-                    <img src={RightArrow} className="bi" width="16" height="16"/>
-                </button>
-            </div>
+            <input
+              type="number"
+              className="form-control me-2 cal-year-input"
+              value={activeYear}
+              onChange={handleYearChange}
+            />
 
-          {/* Weekdays */}
+            <button className="btn" type="button" onClick={handleNextMonth}>
+              <img src={RightArrow} className="bi" width="16" height="16" alt="Next Month" />
+            </button>
+          </div>
+
           <div className="cal-weekdays text-body-secondary">
             {daysOfWeek.map((weekday) => (
               <div key={weekday} className="cal-weekday">{weekday}</div>
             ))}
           </div>
 
-          {/* Days */}
           <div className="cal-days">
             {daysInMonth.map((day, index) => {
               let isDisabled = true;
@@ -123,14 +139,15 @@ const Calendar = () => {
 
               if (oneCount > 1) {
                 isDisabled = true;
-              } 
+              }
 
               return (
                 <button
                   key={index}
-                  className={`btn cal-btn ${isDisabled ? 'disabled' : ''}`}
+                  className={`btn cal-btn ${isDisabled ? 'disabled' : ''} ${day === selectedDay ? 'selected' : ''}`}
                   type="button"
                   disabled={isDisabled}
+                  onClick={() => handleDayButtonClick(day)}
                 >
                   {day}
                 </button>
