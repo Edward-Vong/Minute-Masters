@@ -4,19 +4,22 @@ import "bootstrap/dist/css/bootstrap.css";
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inGroup, setInGroup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkGroupMembership = () => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token); // Set isLoggedIn based on the presence of token
+
+    const joinedGroup = localStorage.getItem('joinedGroup');
+    const groupMember = joinedGroup === 'true'; // Check if joinedGroup is 'true'
+
+    // Set inGroup to true only if the user is logged in and is part of the group
+    setInGroup(!!token && groupMember);
+  };
 
   useEffect(() => {
-    // Check if the user is in a group
-    const joinedGroup = localStorage.getItem('joinedGroup');
-    const groupMember = !!joinedGroup;
-
-    // Logic to determine if the user is in a group
-    if (groupMember) {
-      setInGroup(true); // Set inGroup to true if the user is in a group
-    } else {
-      setInGroup(false); // Set inGroup to false if the user is not in a group
-    }
-  }, []);
+    checkGroupMembership();
+  }, [isOpen]); // Re-run the check whenever isOpen changes
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -28,23 +31,31 @@ const Dropdown = () => {
         Timesheets
       </a>
       <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`} data-bs-popper="static">
-        {inGroup ? (
+        {isLoggedIn ? (
           <>
-            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
-            <li><a className="dropdown-item" href="/#">Manage Group</a></li>
-            <li><a className="dropdown-item" href="/#">View Group</a></li>
+            {inGroup ? (
+              <>
+                <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+                <li><a className="dropdown-item" href="/#">Manage Group</a></li>
+                <li><a className="dropdown-item" href="/viewgroup">View Group</a></li>
+              </>
+            ) : (
+              <>
+                <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+                <li><a className="dropdown-item" href="/#">Create Group</a></li>
+                <li><a className="dropdown-item" href="/joingroup">Join Group</a></li>
+              </>
+            )}
           </>
         ) : (
           <>
             <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
-            <li><a className="dropdown-item" href="/#">Create Group</a></li>
-            <li><a className="dropdown-item" href="/joingroup">Join Group</a></li>
+            <li><a className="dropdown-item" href="/#">Login to Interact</a></li>
           </>
         )}
       </ul>
     </li>
   );
-  
 };
 
 export default Dropdown;

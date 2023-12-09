@@ -13,6 +13,7 @@ import Timer from "./components/timer";
 import CreateGroup from "./components/CreateGroup/createGroup";
 import ManageGroup from "./components/CreateGroup/manageGroup";
 import JoinGroup from "./components/JoinGroup/joingroup";
+import ViewGroup from "./components/ViewGroup/viewgroup";
 
 const App = () => {
  return (
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/creategroup" element={<CreateGroup />}/>
         <Route path="/managegroup" element={<ManageGroup />}/>
         <Route path="/joingroup" element={<JoinGroup />}/>
+        <Route path="/viewgroup" element={<ViewGroup />}/>
       </Routes>
   </div>
   
