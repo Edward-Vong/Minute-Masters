@@ -1,9 +1,23 @@
-// Dropdown.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [inGroup, setInGroup] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is in a group
+    const token = localStorage.getItem('token');
+    const isLoggedIn = !!token;
+
+    // Replace this condition with your logic to determine if the user is in a group
+    // For demonstration purposes, checking if the user is logged in as a mock condition
+    if (isLoggedIn) {
+      setInGroup(true); // Set inGroup to true if the user is in a group
+    } else {
+      setInGroup(false); // Set inGroup to false if the user is not in a group
+    }
+  }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -15,9 +29,21 @@ const Dropdown = () => {
         Timesheets
       </a>
       <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`} data-bs-popper="static">
-        <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
-        <li><a className="dropdown-item" href="#">Create a Group</a></li>
-        <li><a className="dropdown-item" href="/joingroup">Join a Group</a></li>
+        {inGroup ? (
+          // Dropdown items when the user is in a group
+          <>
+            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+            <li><a className="dropdown-item" href="#">Manage Group</a></li>
+            <li><a className="dropdown-item" href="#">View Group</a></li>
+          </>
+        ) : (
+          // Dropdown items when the user is not in a group
+          <>
+            <li><a className="dropdown-item" href="/timesheet">My Calendar</a></li>
+            <li><a className="dropdown-item" href="#">Create a Group</a></li>
+            <li><a className="dropdown-item" href="/joingroup">Join a Group</a></li>
+          </>
+        )}
       </ul>
     </li>
   );
