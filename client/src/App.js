@@ -10,6 +10,9 @@ import Register from "./components/register"; // Import your Register component
 import Navbar from "./components/navbar";
 import Timesheet from "./components/Timesheet/timesheet";
 import Timer from "./components/timer";
+import CreateGroup from "./components/CreateGroup/createGroup";
+import ManageGroup from "./components/CreateGroup/manageGroup";
+import JoinGroup from "./components/JoinGroup/joingroup";
 
 const App = () => {
  return (
@@ -21,6 +24,9 @@ const App = () => {
         <Route path="/register" element={<Register />}/>
         <Route path="/timesheet" element={<Timesheet />}/>
         <Route path="/timer" element={<Timer />}/>
+        <Route path="/creategroup" element={<CreateGroup />}/>
+        <Route path="/managegroup" element={<ManageGroup />}/>
+        <Route path="/joingroup" element={<JoinGroup />}/>
       </Routes>
   </div>
   
