@@ -1,31 +1,40 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
+import Notification from "../Notification"; // Update the path to your Notification component
 
 const JoinGroup = () => {
   const [code, setCode] = useState("");
-  const [validCode, setValidCode] = useState(false);
   const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 
-  const checkCodeValidity = () => {
-    if (isLoggedIn) {
-      // If logged in, check the code validity
-      if (code === "1234") {
-        setValidCode(true);
-        
-        localStorage.setItem('joinedGroup', 'true'); // Set 'joinedGroup' in localStorage
+  const checkCodeValidity = async () => {
+    try {
+      const authToken = localStorage.getItem("token");
+      const response = await fetch("http://localhost:5000/joinGroup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authToken,
+        },
+        body: JSON.stringify({ joinCode: code }),
+      });
 
-        setMessage("Code is valid. You have joined the group!");
-      } 
-      else {
-        setValidCode(false);
-        setMessage("Invalid code. Unable to join the group.");
+      const groupData = await response.json();
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setMessage(groupData.message);
+      } else {
+        setIsSuccess(false);
+        setMessage(`Error: ${groupData.message}`);
       }
-    } else {
-      // If not logged in, display an appropriate message
-      setMessage("Not logged in. Unable to join the group.");
+    } catch (error) {
+      console.error("Error joining group:", error);
+      setIsSuccess(false);
+      setMessage("Error joining group. Please try again.");
     }
   };
 
@@ -48,7 +57,7 @@ const JoinGroup = () => {
       <button className="btn btn-primary" onClick={checkCodeValidity}>
         Join Group
       </button>
-      {message && <p>{message}</p>}
+      {message && <Notification message={message} isSuccess={isSuccess} />}
     </div>
   );
 };

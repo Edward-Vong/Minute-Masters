@@ -1,16 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const NameList = () => {
-  const initialNames = ["John", "Jane", "Bob", "Alice"];
-  const [names, setNames] = useState(initialNames);
+  const [initialNames, setInitialNames] = useState([]);
+  const [names, setNames] = useState([]);
+  const [user, setUser] = useState(null);
 
-  const handleDelete = (index) => {
-    // Create a copy of the names array
-    const updatedNames = [...names];
-    // Remove the name at the specified index
-    updatedNames.splice(index, 1);
-    // Update the state with the new array
-    setNames(updatedNames);
+  useEffect(() => {
+    const getNames = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/listName', {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (response.ok) {
+          const groupData = await response.json();
+          setInitialNames(groupData.membersId);
+          setNames(groupData.members); // Set both initial and current names
+        } else {
+          console.error('Error fetching group data:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching group data:', error.message);
+      }
+    };
+
+    getNames();
+  }, []); // Empty dependency array to run the effect only once on mount
+
+  const handleDelete = async (index, userId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/removeUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        // If the removal is successful, update the state to reflect the change
+        const updatedNames = [...names];
+        updatedNames.splice(index, 1);
+        setNames(updatedNames);
+      } else {
+        console.error('Error removing user from the group:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error removing user from the group:', error.message);
+    }
   };
 
   return (
@@ -20,7 +63,7 @@ const NameList = () => {
         {names.map((name, index) => (
           <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
             {name}
-            <button className="btn btn-danger" onClick={() => handleDelete(index)}>
+            <button className="btn btn-danger" onClick={() => handleDelete(index, initialNames)}>
               Remove
             </button>
           </li>
